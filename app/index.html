@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1c2a4e"><meta name="apple-mobile-web-app-capable" content="yes"><link rel="apple-touch-icon" href="icon-192.png"><title>Mendoza Guazon · Expense &amp; audit system</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--n:#1c2a4e;--page:#e4e4e4;--bg:#f1f3f8;--c:#fff;--b:#d8dce6;--t:#1b2233;--m:#667085;--red:#9b2c2c;--warn:#f6ecd5;--pe:#8a6a12;--peb:#f6ecc9;--ok:#2f6b3f;--okb:#dff0e3;--fl:#a12d2d;--flb:#f8dcdc}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--n:#2f4380;--page:#14161b;--bg:#1a1e29;--c:#232838;--b:#343b50;--t:#e8ebf3;--m:#9aa3b8;--warn:#3a321c;--pe:#e6c36a;--peb:#3d3517;--ok:#8fd5a0;--okb:#1f3b2a;--fl:#f0a0a0;--flb:#442626}}
+:root[data-theme="dark"]{--n:#2f4380;--page:#14161b;--bg:#1a1e29;--c:#232838;--b:#343b50;--t:#e8ebf3;--m:#9aa3b8;--warn:#3a321c;--pe:#e6c36a;--peb:#3d3517;--ok:#8fd5a0;--okb:#1f3b2a;--fl:#f0a0a0;--flb:#442626}
+*{box-sizing:border-box}
+body{margin:0;background:var(--page);color:var(--t);font:14px/1.4 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+.jump{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;padding:10px;max-width:520px;margin:auto}
+.jump button{font:12px system-ui,sans-serif;border:1px solid var(--b);background:var(--c);color:var(--t);border-radius:14px;padding:4px 10px;cursor:pointer}
+.jump .on{background:var(--n);color:#fff;border-color:var(--n)}
+#app{width:100%;max-width:390px;height:min(780px,calc(100dvh - 90px));min-height:560px;margin:0 auto 16px;background:var(--bg);border-radius:28px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 6px 30px #0002}
+.hd{background:var(--n);color:#fff;padding:18px 16px;display:flex;justify-content:space-between;align-items:center;font-size:17px;font-weight:600}
+.hd a,.hd span{font-size:13px;font-weight:400;cursor:pointer;color:#fff;opacity:.9}
+.mn{flex:1;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:10px}
+.cd{background:var(--c);border:1px solid var(--b);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:5px}
+.rw{display:flex;justify-content:space-between;gap:8px;align-items:center}
+small,.m{color:var(--m);font-size:12px}
+p{margin:0}.big{font-size:28px;font-weight:700}
+button{font:inherit;cursor:pointer}
+.pb,.ob,.db{width:100%;padding:13px;border-radius:8px;border:1.5px solid var(--n);font-weight:600}
+.pb{background:var(--n);color:#fff}.ob{background:var(--c);color:var(--t)}.db{background:var(--red);border-color:var(--red);color:#fff}
+.r3{display:flex;gap:8px}.r3 .ob{padding:10px 4px}
+.sg{display:flex;border:1px solid var(--b);border-radius:8px;overflow:hidden;background:var(--c)}
+.sg button{flex:1;border:0;background:none;color:var(--t);padding:9px 4px;font-size:13px}.sg .on{background:var(--n);color:#fff}
+.fl{display:block;background:var(--c);border:1px solid var(--b);border-radius:8px;padding:8px 12px}
+.fl small{display:block}.fl input,.fl select{width:100%;border:0;outline:0;background:none;color:var(--t);font:inherit;padding:2px 0}
+.bd{font-size:11px;font-weight:600;padding:2px 9px;border-radius:10px}
+.Pending{background:var(--peb);color:var(--pe)}.Approved{background:var(--okb);color:var(--ok)}.Flagged{background:var(--flb);color:var(--fl)}
+.nv{display:flex;background:var(--c);border-top:1px solid var(--b)}
+.nv a{flex:1;text-align:center;padding:14px 0;color:var(--m);cursor:pointer;font-size:13px}.nv .on{color:var(--t);font-weight:700}
+.warn{background:var(--warn);color:var(--pe);border-radius:8px;padding:10px;font-size:13px}
+.ph{min-height:64px;display:grid;place-items:center;color:var(--m);background:var(--c);border:1px solid var(--b);border-radius:8px;cursor:pointer;padding:14px}
+.bar{height:8px;background:var(--b);border-radius:4px;overflow:hidden}.bar i{display:block;height:100%;background:var(--n)}
+.fn{color:var(--fl);font-size:13px}
+.login{flex:1;display:flex;flex-direction:column;justify-content:center;gap:12px;padding:24px}.login h1{margin:0;font-size:28px}
+#ts{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--n);color:#fff;padding:9px 16px;border-radius:20px;opacity:0;transition:.2s;pointer-events:none;z-index:9}#ts.on{opacity:1}
+@media(max-width:500px),(display-mode:standalone){.jump{display:none}#app{max-width:none;height:calc(100dvh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));border-radius:0;margin:0;box-shadow:none}}
+</style></head>
+<body>
+<div class="jump" id="jump"></div>
+<div id="app"></div><div id="ts"></div>
+<script src="config.js"></script>
+<script src="api.js"></script>
+<script>
+const $=s=>document.querySelector(s);
+const E=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const f=(n,d=0)=>'₱'+(+n).toLocaleString('en-PH',{minimumFractionDigits:d,maximumFractionDigits:d});
+const num=s=>+String(s).replace(/,/g,'')||0;
+const now=()=>new Date().toLocaleTimeString('en-PH',{hour:'numeric',minute:'2-digit'});
+const tx=()=>'TX-'+Math.random().toString(16).slice(2,8).toUpperCase();
+const T=(a,ty)=>{const b=a/1.12,r={Goods:.01,Service:.02,Professional:.05}[ty]||.02;return{b,v:a-b,r,w:b*r}};
+const COA=['6110 · Fuel','6120 · Repairs & Maintenance','6130 · Office Supplies','6140 · Meals & Entertainment','6150 · Professional Fees','6160 · Utilities'];
+let ME='J. Dela Cruz';
+const X=[
+{id:1,t:'Fuel – Petron Urdaneta',a:2150,d:'Today, 9:12 AM',s:'Pending',by:ME,br:'Pangasinan',tx:'TX-0F3A11'},
+{id:2,t:'Office supplies',a:860,d:'Yesterday',s:'Approved',by:ME,br:'Pangasinan',tx:'TX-0E91B2'},
+{id:3,t:'Truck repair',a:7400,d:'Sep 27',sub:'Sep 27, 4:41 PM',s:'Flagged',by:ME,br:'Pangasinan',tx:'TX-0F3A9C',note:'Receipt is blurry. Retake the photo.',fd:'Sep 28',ty:'Service'},
+{id:4,t:'Meals – client visit',a:3480,d:'Today',s:'Pending',by:'M. Ramos',br:'Manila',tx:'TX-10B7D4'},
+{id:5,t:'Legal consult',a:25000,d:'Sep 28',s:'Pending',by:'A. Cruz',br:'Manila',tx:'TX-0D52E8',ty:'Professional'}];
+const Y=[
+{c:'Reyes Hardware',a:18400,d:'Today, 10:20 AM',s:'Pending',k:0},
+{c:'Lopez Builders',a:42900,d:'Yesterday',s:'Approved',k:1},
+{c:'Dagupan Supply',a:9750,d:'Sep 28',s:'Approved',k:8}];
+const L=[{d:'Sep 30',r:[['Petron · Fuel',2150,'Pangasinan','TX-0F3A11'],['Jollibee · Meals',3480,'Manila','TX-10B7D4']]},
+{d:'Sep 29',r:[['Santos Auto · Repairs',7400,'Pangasinan','TX-0F3A9C'],['PLDT · Utilities',5120,'Manila','TX-0C77A0']]}];
+const S={target:280000,role:null,u:'jdelacruz',scr:'login',tE:'All',tS:'Month',tQ:'Pending',br:'All',q:'',sel:3,m:'',ev:'',fr:'',qn:3,auto:1,sync:'9:14 AM',add:[0,0],sa:0,
+d:{amt:'11,200.00',coa:COA[1],v:'Santos Auto Works',doc:'Receipt',ty:'Service',ph:0},
+s:{c:'Reyes Hardware',i:'Cement, 100 bags',a:'18,400.00',p:'Transfer',n:'SI-000482',ph:0}};
+
+const H=(t,r='')=>`<div class="hd"><b>${t}</b>${r}</div>`;
+const A=(l,s)=>`<a onclick="go('${s}')">${l}</a>`;
+const bk=s=>`<a onclick="go('${s}')">‹</a> `;
+const seg=(o,c,fn)=>`<div class="sg">${o.map(x=>`<button class="${x==c?'on':''}" onclick="${fn}('${x}')">${x}</button>`).join('')}</div>`;
+const fl=(l,v,k,t='text')=>`<label class="fl"><small>${l}</small><input type="${t}" value="${E(v)}" oninput="${k}=this.value"></label>`;
+const bd=s=>`<span class="bd ${s}">${s}</span>`;
+const kv=r=>r.map(x=>`<div class="rw"><span>${x[0]}</span><b>${x[1]}</b></div>`).join('');
+const N=c=>{const m=S.role=='sup'?[['queue','Queue'],['ledger','Ledger'],['settings','Settings']]:[['home','Home'],['new','Log'],['settings','Settings']];
+return `<div class="nv">${m.map(([s,l])=>`<a class="${s==c?'on':''}" onclick="go('${s}')">${l}</a>`).join('')}</div>`};
+const row=e=>`<div class="cd"><div class="rw"><span>${E(e.t)}</span><b>${f(e.a)}</b></div><div class="rw"><small>${e.d}</small>${bd(e.s)}</div>${e.s=='Flagged'&&e.note?`<p class="fn">Supervisor note: ${E(e.note)}</p><button class="ob" onclick="resub(${e.id})">Resubmit photo</button>`:''}</div>`;
+const mine=()=>X.filter(e=>e.by==ME);
+const LG=()=>L.map(g=>{const r=g.r.filter(x=>(S.br=='All'||x[2]==S.br)&&(x[0]+x[1]+x[3]).toLowerCase().includes(S.q.toLowerCase()));
+return r.length?`<div class="cd"><small>${g.d}</small>${r.map(x=>`<div class="rw"><span>${x[0]}</span><b>${f(x[1])}</b></div>`).join('')}</div>`:''}).join('')||'<p class="m">No matches</p>';
+
+const V={
+login:()=>`<div class="login"><div><h1>Mendoza Guazon</h1><p class="m">Expense &amp; audit system</p></div>
+<label class="fl"><small>Username</small><input id="u" value="jdelacruz"></label>
+<label class="fl"><small>Password</small><input id="pw" type="password" value="password"></label>
+<button class="pb" onclick="login()">Sign in</button>
+<p class="m">Your role sets which screens you see. Need access? Ask your supervisor.<br>Demo: <b>jdelacruz</b> = employee, <b>rmendoza</b> = supervisor.</p></div>`,
+
+home:()=>H('Pangasinan','<span>Synced</span>')+`<div class="mn"><div class="cd"><small>Submitted this month</small><div class="big">${f(API.on?mine().reduce((s,e)=>s+e.a,0):48320+S.add[1],2)}</div><small>${API.on?mine().length:14+S.add[0]} expenses · ${API.on?mine().filter(e=>e.s=='Flagged').length:2} need attention</small></div>
+<button class="pb" onclick="go('new')">+ Log expense</button>
+<div class="r3"><button class="ob" onclick="go('logsale')">+ Log sale</button><button class="ob" onclick="go('mysales')">My sales</button><button class="ob" onclick="go('myexp')">My expenses</button></div>
+<b>Recent</b>${mine().slice(0,3).map(row).join('')}</div>`+N('home'),
+
+new:()=>H('New expense',A('✕','home'))+`<div class="mn">${fl('Amount (gross, ₱)',S.d.amt,'S.d.amt')}
+<label class="fl"><small>Account (COA)</small><select onchange="S.d.coa=this.value">${COA.map(x=>`<option ${x==S.d.coa?'selected':''}>${x}</option>`).join('')}</select></label>
+${fl('Vendor',S.d.v,'S.d.v')}${seg(['Invoice','Receipt','Check','Transfer'],S.d.doc,'sd')}${seg(['Goods','Service','Professional'],S.d.ty,'st')}
+<div class="ph" onclick="pick(S.d,'new')">${S.d.ph?'Receipt photo attached ✓':'Snap receipt photo'}</div>
+<button class="pb" onclick="go('tax')">Preview tax</button></div>`,
+
+tax:()=>{const a=num(S.d.amt),t=T(a,S.d.ty);return H('Tax preview',A('‹ Back','new'))+`<div class="mn"><div class="cd">${kv([['Gross',f(a,2)],['Net VAT base (÷ 1.12)',f(t.b,2)],['Input VAT (12%)',f(t.v,2)],['Withholding '+t.r*100+'%',f(t.w,2)],['Net payable',f(a-t.w,2)]])}</div>
+<p class="m">${E(S.d.v)} · ${E(S.d.coa)} · ${S.d.doc}, ${S.d.ty}</p>
+<button class="pb" onclick="subE()">Submit expense</button><button class="ob" onclick="go('new')">Edit details</button></div>`},
+
+myexp:()=>H('My expenses','<span>Sep 2026</span>')+`<div class="mn">${seg(['All','Pending','Approved','Flagged'],S.tE,'sE')}${mine().filter(e=>S.tE=='All'||e.s==S.tE).map(row).join('')||'<p class="m">Nothing here yet</p>'}</div>`+N('home'),
+
+mysales:()=>{const tot=API.on?Y.reduce((s,x)=>s+x.a,0):214300+S.sa;return H('My sales','<span>Sep 2026</span>')+`<div class="mn"><div class="cd"><small>Sales this month</small><div class="big">${f(tot,2)}</div><div class="bar"><i style="width:${Math.min(100,tot/S.target*100)}%"></i></div><small>${Math.round(tot/S.target*100)}% of ${f(S.target)} target</small></div>
+<button class="pb" onclick="go('logsale')">+ Log sale</button>${seg(['Today','Week','Month'],S.tS,'sS')}
+${Y.filter(x=>S.tS=='Month'||(S.tS=='Week'&&x.k<=7)||(S.tS=='Today'&&x.k==0)).map(x=>`<div class="cd"><div class="rw"><span>${E(x.c)}</span><b>${f(x.a)}</b></div><div class="rw"><small>${x.d}</small>${bd(x.s)}</div></div>`).join('')||'<p class="m">No sales for this period</p>'}</div>`+N('home')},
+
+logsale:()=>H('Log sale',A('✕','home'))+`<div class="mn">${fl('Customer',S.s.c,'S.s.c')}${fl('Item or service',S.s.i,'S.s.i')}${fl('Amount (gross, ₱)',S.s.a,'S.s.a')}${seg(['Cash','Transfer','Check'],S.s.p,'sP')}${fl('Invoice / OR number',S.s.n,'S.s.n')}
+<div class="ph" onclick="pick(S.s,'logsale')">${S.s.ph?'Invoice photo attached ✓':'Snap invoice photo'}</div><button class="pb" onclick="go('revsale')">Review sale</button></div>`,
+
+revsale:()=>{const a=num(S.s.a),n=a/1.12;return H('Review sale',A('‹ Back','logsale'))+`<div class="mn"><div class="cd">${kv([['Customer',E(S.s.c)],['Gross sale',f(a,2)],['Net of VAT (÷ 1.12)',f(n,2)],['Output VAT (12%)',f(a-n,2)],['Payment',S.s.p]])}</div>
+<div class="warn">After you submit, only a supervisor can change this sale.</div><button class="pb" onclick="subS()">Submit sale</button><button class="ob" onclick="go('logsale')">Edit details</button></div>`},
+
+queue:()=>{const p=X.filter(e=>e.s=='Pending').length,m={Pending:'Pending',Flagged:'Flagged',Done:'Approved'}[S.tQ];
+return H('Approvals',`<span>${p} pending</span>`)+`<div class="mn">${seg(['Pending','Flagged','Done'],S.tQ,'sQ')}${X.filter(e=>e.s==m).map(e=>`<div class="cd"><div class="rw"><span>${E(e.t)}</span><b>${f(e.a)}</b></div><small>${e.by} · ${e.br} · ${e.d}</small>
+<div class="r3"><button class="ob" onclick="openD(${e.id})">Review</button>${e.s=='Approved'?'':`<button class="pb" onclick="act(${e.id},'Approved')">Approve</button>`}</div></div>`).join('')||'<p class="m">Nothing in this tab</p>'}</div>`+N('queue')},
+
+detail:()=>{const e=X.find(x=>x.id==S.sel)||X[2],t=T(e.a,e.ty||'Service');
+const acts=S.m=='edit'?fl('New amount (₱)',S.ev||e.a,'S.ev')+`<button class="pb" onclick="edit(${e.id})">Save amount</button>`:
+S.m=='flag'?fl('Reason',S.fr,'S.fr')+`<button class="db" onclick="flag(${e.id})">Confirm flag</button>`:
+`<button class="pb" onclick="act(${e.id},'Approved')">Approve</button><button class="ob" onclick="S.m='edit';go('detail')">Edit amount</button><button class="db" onclick="S.m='flag';go('detail')">Flag / reject</button>`;
+return H(bk('queue')+E(e.t),`<span>${e.s}</span>`)+`<div class="mn"><div class="ph" id="rp">Receipt photo · tap to zoom</div>
+<div class="cd">${kv([['Gross',f(e.a,2)],['Net VAT base',f(t.b,2)],['Withholding '+t.r*100+'%',f(t.w,2)]])}</div><b>Audit trail</b>
+${auditHTML(e)}${acts}</div>`},
+
+ledger:()=>H('Ledger','<span>Read only</span>')+`<div class="mn">${fl('Search','','S.q','search').replace('oninput="S.q=this.value"','oninput="S.q=this.value;$(\'#lg\').innerHTML=LG()" placeholder="Vendor, amount or transaction ID"')}
+${seg(['All','Manila','Pangasinan'],S.br,'sB')}<div id="lg" style="display:contents">${LG()}</div></div>`+N('ledger'),
+
+settings:()=>H('Settings')+`<div class="mn"><div class="cd"><div class="rw"><span>Offline queue</span><b>${S.qn} waiting</b></div><small>Saved on this phone. They send when you are online.</small><button class="pb" onclick="syncNow()">Sync now</button></div>
+<div class="cd"><div class="rw"><span>Auto-sync on Wi-Fi</span><b><a onclick="S.auto=!S.auto;go('settings')" style="cursor:pointer">${S.auto?'On':'Off'}</a></b></div><small>Last synced ${S.sync}</small></div>
+<div class="cd">${kv([['Signed in as',S.u],['Role',S.role=='sup'?'Supervisor':'Field employee'],['Branch',S.role=='sup'?'All branches':'Pangasinan']])}</div>
+<button class="ob" onclick="logout()">Sign out</button></div>`+N('settings')
+};
+
+const sd=v=>{S.d.doc=v;go('new')},st=v=>{S.d.ty=v;go('new')},sP=v=>{S.s.p=v;go('logsale')},sE=v=>{S.tE=v;go('myexp')},sS=v=>{S.tS=v;go('mysales')},sQ=v=>{S.tQ=v;go('queue')},sB=v=>{S.br=v;go('ledger')};
+function toast(m){const t=$('#ts');t.textContent=m;t.classList.add('on');clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove('on'),1800)}
+function login_demo(){const u=$('#u').value.trim().toLowerCase();S.u=u||'jdelacruz';S.role=/^(rmendoza|sup)/.test(u)?'sup':'emp';go(S.role=='sup'?'queue':'home')}
+function subE_demo(){const a=num(S.d.amt);X.unshift({id:Date.now(),t:S.d.v||'Expense',a,d:'Today, '+now(),s:'Pending',by:ME,br:'Pangasinan',tx:tx(),ty:S.d.ty});S.add[0]++;S.add[1]+=a;S.d.ph=0;toast('Expense submitted');go('home')}
+function subS_demo(){const a=num(S.s.a);Y.unshift({c:S.s.c||'Customer',a,d:'Today, '+now(),s:'Pending',k:0});S.sa+=a;S.s.ph=0;toast('Sale submitted');go('mysales')}
+function act_demo(id,s){X.find(x=>x.id==id).s=s;toast(s);go('queue')}
+function edit_demo(id){const e=X.find(x=>x.id==id);e.a=num(S.ev)||e.a;S.m='';S.ev='';toast('Amount updated');go('detail')}
+function flag_demo(id){const e=X.find(x=>x.id==id);e.s='Flagged';e.note=S.fr||'Needs review';e.fd='Today';S.m='';S.fr='';toast('Flagged');go('queue')}
+function go(s){S.scr=s;if(!S.role&&s!='login')S.role='emp';render()}
+function render(){$('#app').innerHTML=V[S.scr]();document.querySelectorAll('.jump button').forEach(b=>b.classList.toggle('on',b.dataset.s==S.scr))}
+const J=[['1','login','Login'],['2','home','Employee dashboard','emp'],['3','new','New expense','emp'],['4','tax','Tax preview','emp'],['5','queue','Supervisor queue','sup'],['6','detail','Expense detail','sup'],['7','ledger','Ledger','sup'],['8','settings','Settings'],['9','logsale','Log sale','emp'],['10','revsale','Review sale','emp'],['11','mysales','My sales','emp'],['12','myexp','My expenses','emp']];
+$('#jump').innerHTML=J.map(x=>`<button data-s="${x[1]}" title="${x[2]}">${x[0]}</button>`).join('');
+$('#jump').onclick=e=>{const b=e.target.closest('button');if(!b)return;const x=J.find(j=>j[1]==b.dataset.s);if(x[3])S.role=x[3];S.m='';go(x[1])};
+if(API.on){$('#jump').style.display='none';S.qn=API.queue.length}
+init();
+if("serviceWorker"in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+</script></body></html>
